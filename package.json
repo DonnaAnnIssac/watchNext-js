@@ -1,0 +1,19 @@
+{
+  "name": "watchnext",
+  "version": "1.0.0",
+  "description": "Movie suggestor using scraped data from IMDb",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/DonnaAnnIssac/watchNext-js.git"
+  },
+  "author": "Donna Ann Issac",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/DonnaAnnIssac/watchNext-js/issues"
+  },
+  "homepage": "https://github.com/DonnaAnnIssac/watchNext-js#readme"
+}
