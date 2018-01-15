@@ -1,2 +1,2 @@
 # watchNext-js
-Web scraper for IMDb that also suggests movies to watch next
+Web scraper that fetches info about top rated movies from IMDb
