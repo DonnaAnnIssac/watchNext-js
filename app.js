@@ -1,19 +1,28 @@
 const express = require('express')
-const url = require('url')
+const pg = require('pg')
 const app = express()
-const scraper = require('./lib/scraper')
-const PORT = 9191
+const config = require('./config')
+const helper = require('./lib/helper')
+const populater = require('./lib/populater')
+let connObj
 
-app.use(express.static('public'))
-
-app.get('/movie', (req, res) => {
-  scraper.scrapeMovie(url.parse(req.url, true).query.id, res)
+let connString = 'pg://' + config.db.user + ':' + config.db.password + '@' + config.db.host + ':' + config.db.port + '/' + config.db.name
+let pgPool = new pg.Pool({
+  connectionString: connString
+})
+pgPool.connect((err, client) => {
+  if (err) console.log('Unable to connect: ' + err)
+  app.use(express.static('public'))
+  connObj = client
+  helper(populater, execQuery)
 })
 
-app.get('/top', (req, res) => {
-  let url = 'http://www.imdb.com/chart/top?ref_=nv_mv_250_6'
-  scraper.scrapeTopMovies(url, res)
-})
-app.listen(PORT, () => {
-  console.log('Listening on port: ' + PORT)
+const execQuery = (query, values) => {
+  connObj.query(query, values, (err, res) => {
+    if (err) console.error(err)
+    else console.log(res.rows.length)
+  })
+}
+app.listen(config.app.port, () => {
+  console.log('Listening on port: ' + config.app.port)
 })
