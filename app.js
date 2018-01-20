@@ -11,7 +11,7 @@ let pgPool = new pg.Pool({
 pgPool.connect((err, client) => {
   if (err) console.log('Unable to connect: ' + err)
   app.use(express.static('public'))
-  app.use('/api', routes)
+  app.use(routes)
 })
 
 app.listen(config.app.port, () => {
