@@ -1,28 +1,93 @@
-let info = document.getElementById('info')
+let searchMovie = document.getElementById('getInfo')
+let input = document.getElementById('mTitle')
+let resultDiv = document.getElementById('results')
+let searchBtn = document.getElementById('searchBy')
+let genreBtn = document.getElementById('genres')
+let optSearch = document.getElementById('searchByOpt')
+let releaseBtn = document.getElementById('releaseYear')
 
-window.addEventListener('load', () => {
-  console.log('Making request')
+const displayMovieResults = arr => {
+  arr.map(result => {
+    let obj = document.createElement('div')
+    obj.setAttribute('id', result['tconst'])
+    let title = document.createElement('div')
+    title.innerText = result['primary_title']
+    obj.appendChild(title)
+    let release = document.createElement('div')
+    release.innerText = '(' + result['start_year'] + ')'
+    obj.appendChild(release)
+    let duration = document.createElement('div')
+    duration.innerText = result['runtime_mins'] + ' mins'
+    obj.appendChild(duration)
+    resultDiv.appendChild(obj)
+  })
+}
+
+const searchByGenre = (genre) => {
   let xhr = new XMLHttpRequest()
-  xhr.open('GET', 'http://localhost:9191/top', true)
-  xhr.onload = () => {
-    console.log('Here')
+  xhr.open('GET', 'http://localhost:9191/genre?genre=' + genre.toLowerCase())
+  xhr.send()
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log('Getting response' + JSON.parse(xhr.responseText).title)
-      info.innerText = JSON.parse(xhr.responseText).title
+      console.log('Got response')
+      console.log(xhr.responseText)
+      displayMovieResults(JSON.parse(xhr.responseText))
     }
   }
-  xhr.send()
+}
+
+const createGenreTypes = genreList => {
+  let genres = ['drama', 'action', 'romance', 'crime', 'adventure', 'sciFi', 'thriller']
+  genres.map((genre) => {
+    let opt = document.createElement('div')
+    opt.setAttribute('id', genre)
+    opt.innerText = genre.toUpperCase()
+    opt.addEventListener('click', event => {
+      event.stopPropagation()
+      optSearch.style.display = 'none'
+      document.getElementById('dropdownList').classList.toggle('show')
+      searchByGenre(opt.innerText)
+    })
+    genreList.appendChild(opt)
+  })
+  return genreList
+}
+
+genreBtn.addEventListener('click', (event) => {
+  optSearch.style.display = 'block'
+  let genreList = document.createElement('div')
+  genreList.setAttribute('id', 'genreList')
+  genreList.setAttribute('class', 'genre-types')
+  optSearch.appendChild(createGenreTypes(genreList))
 })
 
-document.querySelector('button').addEventListener('click', () => {
+searchMovie.addEventListener('click', () => {
+  let value = (/(\s)+/g).test(input.value) ? input.value.replace(/(\s)+/g, '+') : input.value
   let xhr = new XMLHttpRequest()
-  xhr.open('GET', 'http://localhost:9191/movie?id=tt1229340', true)
-  xhr.onload = () => {
-    console.log('Here')
+  xhr.open('GET', 'http://localhost:9191/movie?title=' + value)
+  xhr.send()
+  xhr.onreadystatechange = function () {
     if (xhr.readyState === 4 && xhr.status === 200) {
-      console.log('Getting response' + JSON.parse(xhr.responseText).title)
-      info.innerText = JSON.parse(xhr.responseText).title
+      console.log('Got response')
+      console.log(xhr.responseText)
+      displayMovieResults(JSON.parse(xhr.responseText))
     }
   }
-  xhr.send()
+})
+
+searchBtn.addEventListener('click', () => {
+  optSearch.style.display = 'none'
+  document.getElementById('dropdownList').classList.toggle('show')
+})
+
+window.addEventListener = ('click', (event) => {
+  if (!event.target.matches('.dropbtn')) {
+    let dropdowns = document.getElementsByClassName('dropdown-content')
+    for (let i = 0; i < dropdowns.length; i++) {
+      let openDropdown = dropdowns[i]
+      if (openDropdown.classList.contains('show')) {
+        openDropdown.classList.remove('show')
+      }
+    }
+  }
 })
