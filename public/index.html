@@ -1,12 +1,29 @@
 <html>
     <head>
         <title>Watch Next</title>
+        <link rel="stylesheet" type="text/css" href="stylesheet/styles.css">
     </head>
     <body>
         <h1>Watch Next</h1>
         <div id="app">
-            <div id="info"></div>
-            <button>More</button>
+            <div>
+                <div>
+                    <label for="mTitle">Choose a movie: </label>
+                    <input type="text" id="mTitle" name="mName">
+                    <button id="getInfo">Search Movies</button>
+                </div>
+                <div class="dropdown">
+                    <button id="searchBy" class="dropbtn">Search By</button>
+                    <div id="dropdownList" class="dropdown-content">
+                        <div id="genres">Genres</div>
+                        <div id="releaseYear">Release Year</div>
+                    </div>
+                    <div id="searchByOpt"></div>
+                </div>
+            </div>
+            <div id="results">
+
+            </div>
         </div>
         <script src="src/index.js" type="text/javascript"></script>
     </body>
