@@ -5,6 +5,7 @@ let searchBtn = document.getElementById('searchBy')
 let genreBtn = document.getElementById('genres')
 let releaseBtn = document.getElementById('releaseYear')
 let ratingBtn = document.getElementById('topRated')
+let popularityBtn = document.getElementById('popular')
 let optSearch = document.getElementById('searchByOpt')
 
 const displayMovieResults = arr => {
@@ -69,10 +70,7 @@ releaseBtn.addEventListener('click', () => {
   xhr.open('GET', 'http://localhost:9191/movie/release')
   xhr.send()
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      displayMovieResults(JSON.parse(xhr.responseText))
-    }
-  }
+    if (xhr.readyState === 4 && xhr.status === 200) displayMovieResults(JSON.parse(xhr.responseText))    }
 })
 
 ratingBtn.addEventListener('click', () => {
@@ -81,20 +79,27 @@ ratingBtn.addEventListener('click', () => {
   xhr.open('GET', 'http://localhost:9191/movie/rating')
   xhr.send()
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      displayMovieResults(JSON.parse(xhr.responseText))
-    }
+    if (xhr.readyState === 4 && xhr.status === 200) displayMovieResults(JSON.parse(xhr.responseText))
   }
 })
+
+popularityBtn.addEventListener('click', () => {
+  document.getElementById('dropdownList').classList.toggle('show')
+  let xhr = new XMLHttpRequest()
+  xhr.open('GET', 'http://localhost:9191/movie/popular')
+  xhr.send()
+  xhr.onreadystatechange = function () {
+    if (xhr.readyState === 4 && xhr.status === 200) displayMovieResults(JSON.parse(xhr.responseText))
+  }
+})
+
 searchMovie.addEventListener('click', () => {
   let value = (/(\s)+/g).test(input.value) ? input.value.replace(/(\s)+/g, '+') : input.value
   let xhr = new XMLHttpRequest()
   xhr.open('GET', 'http://localhost:9191/movie?title=' + value)
   xhr.send()
   xhr.onreadystatechange = function () {
-    if (xhr.readyState === 4 && xhr.status === 200) {
-      displayMovieResults(JSON.parse(xhr.responseText))
-    }
+    if (xhr.readyState === 4 && xhr.status === 200) displayMovieResults(JSON.parse(xhr.responseText))
   }
 })
 
