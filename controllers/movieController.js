@@ -1,7 +1,7 @@
 const db = require('../db')
 let movieController = {}
 
-movieController.get = (req, res) => {
+movieController.getMovie = (req, res) => {
   let value = '%' + req.query.title.toUpperCase() + '%'
   let q1 = 'select movies.tconst, movies.primary_title, movies.start_year, movies.runtime_mins, ratings.average_rating from movies'
   let q2 = ' inner join ratings on movies.tconst = ratings.tconst'
@@ -58,4 +58,5 @@ movieController.getByDirector = (req, res) => {
     res.json(response.rows)
   })
 }
+
 module.exports = movieController
