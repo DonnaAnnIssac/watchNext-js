@@ -25,9 +25,7 @@ export default {
   },
   methods: {
     changeView (arr) {
-      console.log('Captured event')
       this.dataLoaded = arr
-      console.log(this.dataLoaded)
       this.currentView = results
     }
   }
