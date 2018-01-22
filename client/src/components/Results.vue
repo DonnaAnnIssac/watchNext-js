@@ -1,45 +1,19 @@
 <template>
   <div>
-   <div>{{ variable.primary_title }}</div>
+    <div v-if="data.length !== 0">
+      <div v-for="movie in data" :key="movie.tconst">
+        <div>{{movie.primary_title}}</div>
+        <div>{{movie.start_year}}</div>
+        <div>{{movie.runtime_mins}}</div>
+        <div>{{movie.average_rating}}</div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
-  name: 'Results',
-  props: ['variable'],
-  methods: {
-    displayMovieResults (arr) {
-      arr.map(result => {
-        let obj = document.createElement('div')
-        obj.setAttribute('id', result['tconst'])
-        let title = document.createElement('div')
-        title.innerText = result['primary_title']
-        obj.appendChild(title)
-        let release = document.createElement('div')
-        release.innerText = '(' + result['start_year'] + ')'
-        obj.appendChild(release)
-        let duration = document.createElement('div')
-        duration.innerText = result['runtime_mins'] + ' mins'
-        obj.appendChild(duration)
-        let rating = document.createElement('div')
-        rating.innerText = result['average_rating']
-        obj.appendChild(rating)
-      })
-    },
-    computed: {
-      resultReady () {
-        console.log(this.results.length)
-        if (this.results.length > 0) return true
-      }
-    }
-  },
-  mounted: function () {
-    console.log('Inside child')
-  },
-  updated: function () {
-    console.log('updated')
-    console.log(this.variable)
-  }
+  name: 'resultView',
+  props: ['data']
 }
 </script>
