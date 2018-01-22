@@ -3,16 +3,34 @@
     <header>
     <div class="inner">Watch Next</div>
     </header>
-    <search-by></search-by>
+    <search-by v-on:dataLoaded="changeView"></search-by>
+    <div>
+      <component :is="currentView" :data="dataLoaded"></component>
+    </div>
   </div>
 </template>
 
 <script>
 import search from './components/Search.vue'
+import results from './components/Results.vue'
 import Vue from 'vue'
 Vue.component('search-by', search)
 export default {
-  name: 'app'
+  name: 'app',
+  data () {
+    return {
+      currentView: null,
+      dataLoaded: []
+    }
+  },
+  methods: {
+    changeView (arr) {
+      console.log('Captured event')
+      this.dataLoaded = arr
+      console.log(this.dataLoaded)
+      this.currentView = results
+    }
+  }
 }
 </script>
 
