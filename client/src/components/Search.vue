@@ -12,60 +12,53 @@
                         <option value="romance">Romance</option>
                         <option value="action">Action</option>
                         <option value="thriller">Thriller</option>
-                        <option value="scifi">Sci-Fi</option>
+                        <option value="sci-fi">Sci-Fi</option>
                         <option value="crime">Crime</option>
                         <option value="adventure">Adventure</option>
+                        <option value="comedy">Comedy</option>
                     </optgroup>
-                    <option value="Latest">Latest</option>
-                    <option value="Top Rated">Top Rated</option>
-                    <option value="Popularity">Popularity</option>
+                    <option value="release">Latest</option>
+                    <option value="rating">Top Rated</option>
+                    <option value="popular">Popularity</option>
                 </select>
                 <button type="submit" >Search</button>
-            </div>
-            <div v-for="result in resultsArr" :key="result">
-                <result-view v-bind:variable="result"></result-view>
             </div>
         </div>
     </div>
 </template>
 
 <script>
-import results from './Results.vue'
-import Vue from 'vue'
-Vue.component('result-view', results)
-
+const genres = ['drama', 'romance', 'action', 'thriller', 'comedy', 'adventure', 'sci-fi', 'crime']
 export default ({
-  name: 'Search',
+  name: 'searchBy',
   data () {
     return {
       input: '',
       resultsArr: [],
-      count: 1,
-      dataLoaded: false,
       selectedOpt: null
     }
   },
   methods: {
     searchMovie () {
-      this.resultsArr = []
       let value = (/(\s)+/g).test(this.input) ? this.input.replace(/(\s)+/g, '+') : this.input
+      this.fetchResults('http://localhost:9191/movie?title=' + value)
+    },
+    searchByOpt () {
+      if (genres.includes(this.selectedOpt)) {
+        this.fetchResults('http://localhost:9191/movie/genre?genre=' + this.selectedOpt)
+      } else this.fetchResults('http://localhost:9191/movie/' + this.selectedOpt)
+    },
+    fetchResults (url) {
+      let vm = this
       let xhr = new XMLHttpRequest()
-      xhr.open('GET', 'http://localhost:9191/movie?title=' + value)
+      xhr.open('GET', url)
       xhr.send()
       xhr.onreadystatechange = function () {
         if (xhr.readyState === 4 && xhr.status === 200) {
-          this.dataLoaded = true
-          this.resultsArr = (JSON.parse(xhr.responseText))
-          console.log(this.dataLoaded)
-          console.log(this.resultsArr[0])
-          console.log('Got results: ' + this.resultsArr.length)
-          this.count++
-          console.log(this.count)
+          vm.resultsArr = (JSON.parse(xhr.responseText))
+          vm.$emit('dataLoaded', vm.resultsArr)
         }
       }
-    },
-    searchByOpt () {
-      console.log(this.selectedOpt)
     }
   }
 })
